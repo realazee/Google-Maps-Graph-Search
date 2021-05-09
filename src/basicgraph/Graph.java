@@ -2,7 +2,9 @@ package basicgraph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,7 +124,16 @@ public abstract class Graph {
 	 */
 	public List<Integer> degreeSequence() {
 		// XXX: Implement in part 1 of week 2
-		return null;
+		List<Integer> output = new LinkedList<>();
+		int currDegree = 0;
+		
+		for(int i = 0; i < getNumVertices(); i++) {
+			currDegree = getNeighbors(i).size() + getInNeighbors(i).size();
+			output.add(currDegree);
+		}
+		Collections.sort(output, Comparator.reverseOrder());
+		
+		return output;
 	}
 	
 	/**
