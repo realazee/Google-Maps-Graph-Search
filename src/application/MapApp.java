@@ -168,7 +168,7 @@ implements MapComponentInitializedListener {
 	@Override
 	public void mapInitialized() {
 
-		LatLong center = new LatLong(32.8810, -117.2380);
+		LatLong center = new LatLong(37.3768662, -122.114633);
 
 
 		// set map options
