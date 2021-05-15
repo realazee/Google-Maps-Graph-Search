@@ -8,6 +8,8 @@
 package roadgraph;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -24,6 +26,11 @@ import util.GraphLoader;
  */
 public class MapGraph {
 	//TODO: Add your member variables here in WEEK 3
+	private HashMap<GeographicPoint, ArrayList<Road>> vertices;
+	private int numEdges;
+	private int numVertices;
+	
+	
 	
 	
 	/** 
@@ -32,6 +39,10 @@ public class MapGraph {
 	public MapGraph()
 	{
 		// TODO: Implement in this constructor in WEEK 3
+		vertices = new HashMap<GeographicPoint, ArrayList<Road>>();
+		numEdges = 0;
+		numVertices = 0;
+		
 	}
 	
 	/**
@@ -41,7 +52,7 @@ public class MapGraph {
 	public int getNumVertices()
 	{
 		//TODO: Implement this method in WEEK 3
-		return 0;
+		return numVertices;
 	}
 	
 	/**
@@ -61,7 +72,7 @@ public class MapGraph {
 	public int getNumEdges()
 	{
 		//TODO: Implement this method in WEEK 3
-		return 0;
+		return numEdges;
 	}
 
 	
@@ -76,7 +87,12 @@ public class MapGraph {
 	public boolean addVertex(GeographicPoint location)
 	{
 		// TODO: Implement this method in WEEK 3
-		return false;
+		if(location == null || vertices.get(location) == null) {
+			return false;
+		}
+		vertices.put(location, new ArrayList<Road>());
+		numVertices++;
+		return true;
 	}
 	
 	/**
@@ -95,6 +111,7 @@ public class MapGraph {
 			String roadType, double length) throws IllegalArgumentException {
 
 		//TODO: Implement this method in WEEK 3
+		
 		
 	}
 	
