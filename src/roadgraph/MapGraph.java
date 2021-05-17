@@ -10,7 +10,10 @@ package roadgraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -149,6 +152,23 @@ public class MapGraph {
 			 					     GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 	{
 		// TODO: Implement this method in WEEK 3
+		Queue<GeographicPoint> queue = new LinkedList<GeographicPoint>();
+		HashSet<GeographicPoint> visited = new HashSet<GeographicPoint>();
+		HashMap<GeographicPoint, GeographicPoint> parent = new HashMap<GeographicPoint, GeographicPoint>();
+		GeographicPoint curr;
+		queue.add(start);//enqueue
+		visited.add(start);
+		while(!queue.isEmpty()) {
+			curr = queue.remove();
+			if(curr == goal) {
+				return (List<GeographicPoint>) parent;
+			}
+			
+			
+		}
+		
+		
+		
 		
 		// Hook for visualization.  See writeup.
 		//nodeSearched.accept(next.getLocation());
