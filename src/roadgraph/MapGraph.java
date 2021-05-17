@@ -111,7 +111,12 @@ public class MapGraph {
 			String roadType, double length) throws IllegalArgumentException {
 
 		//TODO: Implement this method in WEEK 3
+		if(from == null || to == null || roadName.length() == 0 || roadType.length() == 0 || length == 0) {
+			throw new IllegalArgumentException();
+		}
 		
+		vertices.get(from).add(new Road(to, roadName, roadType, length));
+		numEdges++;
 		
 	}
 	
