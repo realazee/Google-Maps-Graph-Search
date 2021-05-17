@@ -61,8 +61,8 @@ public class MapGraph {
 	 */
 	public Set<GeographicPoint> getVertices()
 	{
-		//TODO: Implement this method in WEEK 3
-		return null;
+		
+		return vertices.keySet();
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class MapGraph {
 	 */
 	public int getNumEdges()
 	{
-		//TODO: Implement this method in WEEK 3
+		
 		return numEdges;
 	}
 
@@ -87,7 +87,7 @@ public class MapGraph {
 	public boolean addVertex(GeographicPoint location)
 	{
 		// TODO: Implement this method in WEEK 3
-		if(location == null || vertices.get(location) == null) {
+		if(location == null || vertices.get(location) != null) {
 			return false;
 		}
 		vertices.put(location, new ArrayList<Road>());
@@ -111,7 +111,10 @@ public class MapGraph {
 			String roadType, double length) throws IllegalArgumentException {
 
 		//TODO: Implement this method in WEEK 3
-		if(from == null || to == null || roadName.length() == 0 || roadType.length() == 0 || length == 0) {
+		if(from == null || to == null || roadName == null || roadType == null || length < 0) {
+			throw new IllegalArgumentException();
+		}
+		if(vertices.get(from) == null || vertices.get(to) == null) {
 			throw new IllegalArgumentException();
 		}
 		
