@@ -155,10 +155,37 @@ public class MapGraph {
 		
 		Queue<Intersection> queue = new LinkedList<Intersection>();
 		HashSet<Intersection> visited = new HashSet<Intersection>();
-		HashMap<GeographicPoint, Intersection> parent = new HashMap<GeographicPoint, Intersection>();
+		HashMap<Intersection, Intersection> parent = new HashMap<Intersection, Intersection>();
 		Intersection curr;
-		//queue.add(start);
-		//visited.add
+		List<Road> edges;
+		
+		queue.add(vertices.get(start));
+		visited.add(vertices.get(start));
+		while(!queue.isEmpty()) {
+			curr = queue.remove();
+			if(curr == vertices.get(goal)) {
+				List<GeographicPoint> output = new LinkedList<GeographicPoint>();
+				output.add(0, goal);
+				while(curr != vertices.get(start)) {
+					output.add(0, parent.get(curr).getCoords());
+					curr = parent.get(curr);
+				}
+				return output;
+			}
+			edges = vertices.get(curr.getCoords()).getEdges();
+			for(int i = 0; i < edges.size(); i++) {
+				Intersection n = vertices.get(edges.get(i).getToNode());//getting neighbors is simply getting the toNode of the road.
+				if(!visited.contains(n)) {
+					visited.add(n);
+					parent.put(n, curr);
+					queue.add(n);
+				}
+			}
+			
+		
+			
+		}
+	
 		
 		
 		// Hook for visualization.  See writeup.
