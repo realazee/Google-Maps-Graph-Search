@@ -29,7 +29,7 @@ import util.GraphLoader;
  */
 public class MapGraph {
 	//TODO: Add your member variables here in WEEK 3
-	private HashMap<GeographicPoint, ArrayList<Road>> vertices;
+	private HashMap<GeographicPoint, Intersection> vertices;
 	private int numEdges;
 	private int numVertices;
 	
@@ -42,7 +42,7 @@ public class MapGraph {
 	public MapGraph()
 	{
 		// TODO: Implement in this constructor in WEEK 3
-		vertices = new HashMap<GeographicPoint, ArrayList<Road>>();
+		vertices = new HashMap<GeographicPoint, Intersection>();
 		numEdges = 0;
 		numVertices = 0;
 		
@@ -93,7 +93,7 @@ public class MapGraph {
 		if(location == null || vertices.get(location) != null) {
 			return false;
 		}
-		vertices.put(location, new ArrayList<Road>());
+		vertices.put(location, new Intersection(location, new ArrayList<Road>()));
 		numVertices++;
 		return true;
 	}
@@ -121,7 +121,7 @@ public class MapGraph {
 			throw new IllegalArgumentException();
 		}
 		
-		vertices.get(from).add(new Road(to, roadName, roadType, length));
+		vertices.get(from).addEdges(new Road(to, roadName, roadType, length));
 		numEdges++;
 		
 	}
@@ -132,7 +132,7 @@ public class MapGraph {
 	 * @param start The starting location
 	 * @param goal The goal location
 	 * @return The list of intersections that form the shortest (unweighted)
-	 *   path from start to goal (including both start and goal).
+	 *   path from start to goal (inclu ding both start and goal).
 	 */
 	public List<GeographicPoint> bfs(GeographicPoint start, GeographicPoint goal) {
 		// Dummy variable for calling the search algorithms
@@ -152,22 +152,13 @@ public class MapGraph {
 			 					     GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 	{
 		// TODO: Implement this method in WEEK 3
-		Queue<GeographicPoint> queue = new LinkedList<GeographicPoint>();
-		HashSet<GeographicPoint> visited = new HashSet<GeographicPoint>();
-		HashMap<GeographicPoint, GeographicPoint> parent = new HashMap<GeographicPoint, GeographicPoint>();
-		GeographicPoint curr;
-		queue.add(start);//enqueue
-		visited.add(start);
-		while(!queue.isEmpty()) {
-			curr = queue.remove();
-			if(curr == goal) {
-				return (List<GeographicPoint>) parent;
-			}
-			
-			
-		}
 		
-		
+		Queue<Intersection> queue = new LinkedList<Intersection>();
+		HashSet<Intersection> visited = new HashSet<Intersection>();
+		HashMap<GeographicPoint, Intersection> parent = new HashMap<GeographicPoint, Intersection>();
+		Intersection curr;
+		//queue.add(start);
+		//visited.add
 		
 		
 		// Hook for visualization.  See writeup.
