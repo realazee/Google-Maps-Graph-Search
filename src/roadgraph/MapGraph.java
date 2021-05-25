@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -121,7 +122,7 @@ public class MapGraph {
 			throw new IllegalArgumentException();
 		}
 		
-		vertices.get(from).addEdges(new Road(to, roadName, roadType, length));
+		vertices.get(from).addEdges(new Road(from,to, roadName, roadType, length));
 		numEdges++;
 		
 	}
@@ -165,6 +166,7 @@ public class MapGraph {
 			curr = queue.remove();
 			if(curr == vertices.get(goal)) {
 				List<GeographicPoint> output = new LinkedList<GeographicPoint>();
+				nodeSearched.accept(curr.getCoords());
 				output.add(0, goal);
 				while(curr != vertices.get(start)) {
 					output.add(0, parent.get(curr).getCoords());
@@ -189,7 +191,7 @@ public class MapGraph {
 		
 		
 		// Hook for visualization.  See writeup.
-		//nodeSearched.accept(next.getLocation());
+		
 
 		return null;
 	}
@@ -205,6 +207,8 @@ public class MapGraph {
 	public List<GeographicPoint> dijkstra(GeographicPoint start, GeographicPoint goal) {
 		// Dummy variable for calling the search algorithms
 		// You do not need to change this method.
+		
+		
         Consumer<GeographicPoint> temp = (x) -> {};
         return dijkstra(start, goal, temp);
 	}
@@ -220,13 +224,65 @@ public class MapGraph {
 	public List<GeographicPoint> dijkstra(GeographicPoint start, 
 										  GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 	{
-		// TODO: Implement this method in WEEK 4
-
-		// Hook for visualization.  See writeup.
-		//nodeSearched.accept(next.getLocation());
+		
+		PriorityQueue<Intersection> priQ = new PriorityQueue<Intersection>();
+		HashMap<Intersection, Intersection> parent = new HashMap<Intersection,Intersection>();
+		HashSet<Intersection> checked = new HashSet<>();
+		
+		for(Intersection node : vertices.values()) {
+			node.setDistance(1000000000);
+		}
+		
+		Intersection startPoint = vertices.get(start);
+		Intersection endPoint = vertices.get(goal);
+		startPoint.setDistance(0);
+		
+		priQ.add(startPoint);
+		Intersection curr;
+		//List<Road> edges;
+		
+		while(!priQ.isEmpty()) {
+			curr = priQ.remove();
+			checked.add(curr);
+			nodeSearched.accept(curr.getCoords());
+			if(curr == vertices.get(goal)) {
+				List<GeographicPoint> output = new LinkedList<GeographicPoint>();
+				
+				while(!endPoint.equals(startPoint)) {
+					output.add(0, endPoint.getCoords());
+					endPoint = parent.get(endPoint);
+				}
+				output.add(0, startPoint.getCoords());
+				return output;
+			}
+			
+			HashMap<Intersection, Double> distance = new HashMap<>();
+			//edges = vertices.get(curr.getCoords()).getEdges();
+			
+			for(Road edge : curr.getEdges()) {
+				distance.put(vertices.get(edge.getNeighbor(curr)), edge.getLength());
+			}
+			for(GeographicPoint node : curr.getNeighbors()) {
+				if(checked.contains(vertices.get(node))){
+					continue;
+				}
+				Double distanceOfNode = curr.getDistance() + distance.get(vertices.get(node));
+				if(distanceOfNode < vertices.get(node).getDistance()) {
+					vertices.get(node).setDistance(distanceOfNode);
+					parent.put(vertices.get(node), curr);
+					priQ.add(vertices.get(node));
+					
+				}
+			}
+			
+			
+			
+		}
+		
 		
 		return null;
 	}
+	
 
 	/** Find the path from start to goal using A-Star search
 	 * 
@@ -252,12 +308,66 @@ public class MapGraph {
 	public List<GeographicPoint> aStarSearch(GeographicPoint start, 
 											 GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 	{
-		// TODO: Implement this method in WEEK 4
 		
-		// Hook for visualization.  See writeup.
-		//nodeSearched.accept(next.getLocation());
-		
-		return null;
+				PriorityQueue<Intersection> priQ = new PriorityQueue<Intersection>();
+				HashMap<Intersection, Intersection> parent = new HashMap<Intersection,Intersection>();
+				HashSet<Intersection> checked = new HashSet<>();
+				
+				for(Intersection node : vertices.values()) {
+					node.setDistance(1000000000);
+				}
+				
+				Intersection startPoint = vertices.get(start);
+				Intersection endPoint = vertices.get(goal);
+				startPoint.setDistance(0);
+				
+				priQ.add(startPoint);
+				Intersection curr;
+				//List<Road> edges;
+				
+				while(!priQ.isEmpty()) {
+					curr = priQ.remove();
+					checked.add(curr);
+					nodeSearched.accept(curr.getCoords());
+					if(curr == vertices.get(goal)) {
+						List<GeographicPoint> output = new LinkedList<GeographicPoint>();
+						
+						while(!endPoint.equals(startPoint)) {
+							output.add(0, endPoint.getCoords());
+							endPoint = parent.get(endPoint);
+						}
+						output.add(0, startPoint.getCoords());
+						return output;
+					}
+					
+					HashMap<Intersection, Double> distance = new HashMap<>();
+					//edges = vertices.get(curr.getCoords()).getEdges();
+					
+					for(Road edge : curr.getEdges()) {
+						distance.put(vertices.get(edge.getNeighbor(curr)), edge.getLength());
+					}
+					for(GeographicPoint node : curr.getNeighbors()) {
+						if(checked.contains(vertices.get(node))){
+							continue;
+						}
+						Double distanceOfNode = curr.getDistance() + distance.get(vertices.get(node));
+						if(distanceOfNode < vertices.get(node).getDistance()) {
+							vertices.get(node).setDistance(distanceOfNode);
+							parent.put(vertices.get(node), curr);
+							priQ.add(vertices.get(node));
+							
+						}
+					}
+					
+					
+					
+				}
+				
+				// Hook for visualization.  See writeup.
+				//nodeSearched.accept(next.getLocation());
+				
+				return null;
+
 	}
 
 	
@@ -277,7 +387,7 @@ public class MapGraph {
 		 * the Week 3 End of Week Quiz, EVEN IF you score 100% on the 
 		 * programming assignment.
 		 */
-		/*
+		
 		MapGraph simpleTestMap = new MapGraph();
 		GraphLoader.loadRoadMap("data/testdata/simpletest.map", simpleTestMap);
 		
@@ -306,11 +416,11 @@ public class MapGraph {
 		System.out.println("Test 3 using utc: Dijkstra should be 37 and AStar should be 10");
 		testroute = testMap.dijkstra(testStart,testEnd);
 		testroute2 = testMap.aStarSearch(testStart,testEnd);
-		*/
+		
 		
 		
 		/* Use this code in Week 3 End of Week Quiz */
-		/*MapGraph theMap = new MapGraph();
+		MapGraph theMap = new MapGraph();
 		System.out.print("DONE. \nLoading the map...");
 		GraphLoader.loadRoadMap("data/maps/utc.map", theMap);
 		System.out.println("DONE.");
@@ -322,7 +432,7 @@ public class MapGraph {
 		List<GeographicPoint> route = theMap.dijkstra(start,end);
 		List<GeographicPoint> route2 = theMap.aStarSearch(start,end);
 
-		*/
+		
 		
 	}
 	
