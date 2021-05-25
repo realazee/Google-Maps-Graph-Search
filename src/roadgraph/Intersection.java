@@ -56,6 +56,9 @@ public class Intersection implements Comparable<Intersection>{
 		}
 		return neighbors;
 	}
+	public Double getDistanceToOtherNode(Intersection other) {
+        return coords.distance(other.getCoords());
+    }
 
 	
 	

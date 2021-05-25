@@ -347,17 +347,19 @@ public class MapGraph {
 						distance.put(vertices.get(edge.getNeighbor(curr)), edge.getLength());
 					}
 					for(GeographicPoint node : curr.getNeighbors()) {
-						if(checked.contains(vertices.get(node))){
-							continue;
-						}
-						Double distanceOfNode = curr.getDistance() + distance.get(vertices.get(node));
-						if(distanceOfNode < vertices.get(node).getDistance()) {
-							vertices.get(node).setDistance(distanceOfNode);
-							parent.put(vertices.get(node), curr);
-							priQ.add(vertices.get(node));
-							
-						}
-					}
+		                if(checked.contains(vertices.get(node))){
+		                    continue;
+		                }
+		                Double distanceNode = curr.getDistance() + distance.get(vertices.get(node));
+		                Double prioritized = vertices.get(node).getDistanceToOtherNode(vertices.get(goal));
+
+		                if(distanceNode + prioritized < vertices.get(node).getDistance()) {
+		                    vertices.get(node).setDistance(distanceNode);
+		                    parent.put(vertices.get(node), curr);
+		                    priQ.add(vertices.get(node));
+
+		                }
+		            }
 					
 					
 					
